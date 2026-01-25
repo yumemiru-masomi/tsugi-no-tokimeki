@@ -1,39 +1,73 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import liff from "@line/liff";
 
 export default function Page() {
-  const [message, setMessage] = useState("初期化中...");
+  const router = useRouter();
 
   useEffect(() => {
     const init = async () => {
+      // ローカル環境の判定
+      const isLocal =
+        typeof window !== "undefined" &&
+        (window.location.hostname === "localhost" ||
+          window.location.hostname === "127.0.0.1");
+
+      // ローカル環境の場合は認証をスキップ
+      if (isLocal) {
+        // プロフィールがあるかチェック
+        const savedProfile = localStorage.getItem("userProfile");
+        if (savedProfile) {
+          router.push("/home");
+        } else {
+          router.push("/onboarding");
+        }
+        return;
+      }
+
       try {
         const liffId = process.env.NEXT_PUBLIC_LIFF_ID;
-        if (!liffId) throw new Error("LIFF ID がない");
+        if (!liffId) {
+          // 本番環境ではエラーページを表示
+          if (process.env.NODE_ENV === "production") {
+            router.push("/error?message=LIFF_ID_NOT_CONFIGURED");
+            return;
+          }
+          // 開発環境ではホームへ
+          console.error("LIFF ID が設定されていません");
+          router.push("/home");
+          return;
+        }
 
         await liff.init({ liffId });
 
         if (!liff.isLoggedIn()) {
+          // 未認証の場合はLINEログインへ
           liff.login();
           return;
         }
 
-        const profile = await liff.getProfile();
-        setMessage(`こんにちは ${profile.displayName} さん！`);
+        // 認証済みの場合はホームへリダイレクト
+        router.push("/home");
       } catch (e) {
-        setMessage("エラーが発生しました");
-        console.error(e);
+        console.error("LIFF初期化エラー:", e);
+        // 本番環境ではエラーページを表示
+        if (process.env.NODE_ENV === "production") {
+          router.push("/error?message=LIFF_INIT_FAILED");
+          return;
+        }
+        router.push("/home");
       }
     };
 
     init();
-  }, []);
+  }, [router]);
 
   return (
     <main style={{ padding: 24 }}>
-      <h1>LIFF × Next.js</h1>
-      <p>{message}</p>
+      <p>認証中...</p>
     </main>
   );
 }
