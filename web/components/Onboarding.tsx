@@ -70,8 +70,8 @@ export default function Onboarding({ user, onComplete }: OnboardingProps) {
     };
 
     return (
-        <div className="flex flex-col h-full bg-pink-50 p-6 overflow-y-auto">
-            <div className="flex-1 flex flex-col justify-center items-center max-w-md mx-auto w-full">
+        <div className="flex flex-col h-full bg-pink-50 max-w-md mx-auto shadow-2xl overflow-y-auto">
+            <div className="flex-1 flex flex-col justify-center items-center p-6 w-full">
                 <div className="mb-8 text-center">
                     <Sparkles className="w-12 h-12 text-pink-500 mx-auto mb-4" />
                     <h1 className="text-2xl font-bold text-gray-800">Tsugi no Tokimeki</h1>
@@ -84,15 +84,15 @@ export default function Onboarding({ user, onComplete }: OnboardingProps) {
 
                 {step === 1 && (
                     <div className="w-full bg-white p-6 rounded-2xl shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <h2 className="text-lg font-bold mb-4 text-center">推しキャラを選んでね</h2>
+                        <h2 className="text-lg font-bold mb-4 text-center text-gray-800">推しキャラを選んでね</h2>
                         <div className="flex flex-wrap gap-2 justify-center mb-6">
                             {CHARACTERS.map((char) => (
                                 <button
                                     key={char}
                                     onClick={() => toggleFavorite(char)}
                                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${profile.favorites?.includes(char)
-                                            ? "bg-pink-500 text-white shadow-md transform scale-105"
-                                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                        ? "bg-pink-500 text-white shadow-md transform scale-105"
+                                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                         }`}
                                 >
                                     {char}
@@ -111,15 +111,15 @@ export default function Onboarding({ user, onComplete }: OnboardingProps) {
 
                 {step === 2 && (
                     <div className="w-full bg-white p-6 rounded-2xl shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <h2 className="text-lg font-bold mb-4 text-center">よく行くエリアは？</h2>
+                        <h2 className="text-lg font-bold mb-4 text-center text-gray-800">よく行くエリアは？</h2>
                         <div className="grid grid-cols-2 gap-3 mb-6">
                             {AREAS.map((area) => (
                                 <button
                                     key={area}
                                     onClick={() => setProfile({ ...profile, area })}
                                     className={`p-3 rounded-xl text-sm font-medium border-2 transition-all ${profile.area === area
-                                            ? "border-pink-500 bg-pink-50 text-pink-700"
-                                            : "border-transparent bg-gray-100 text-gray-600"
+                                        ? "border-pink-500 bg-pink-50 text-pink-700"
+                                        : "border-transparent bg-gray-100 text-gray-600"
                                         }`}
                                 >
                                     {area}
@@ -146,7 +146,7 @@ export default function Onboarding({ user, onComplete }: OnboardingProps) {
 
                 {step === 3 && (
                     <div className="w-full bg-white p-6 rounded-2xl shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <h2 className="text-lg font-bold mb-2 text-center">いつ買いに行ける？(v3)</h2>
+                        <h2 className="text-lg font-bold mb-2 text-center text-gray-800">いつ買いに行ける？(v3)</h2>
                         <p className="text-xs text-center text-gray-400 mb-4">
                             空いている時間を登録すると
                             <br />
@@ -165,8 +165,8 @@ export default function Onboarding({ user, onComplete }: OnboardingProps) {
                                                 key={slot}
                                                 onClick={() => toggleAvailability(idx, slot)}
                                                 className={`whitespace-nowrap px-2 py-1 rounded-md text-xs border ${(profile.availability?.[idx.toString()] || []).includes(slot)
-                                                        ? "bg-blue-100 border-blue-400 text-blue-700"
-                                                        : "bg-white border-gray-200 text-gray-400"
+                                                    ? "bg-blue-100 border-blue-400 text-blue-700"
+                                                    : "bg-white border-gray-200 text-gray-400"
                                                     }`}
                                             >
                                                 {slot}
